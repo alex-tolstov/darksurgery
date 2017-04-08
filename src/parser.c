@@ -903,12 +903,15 @@ void save_c_convolutional_weights(layer l, FILE *fp)
     }
 #endif
     int num = l.n*l.c*l.size*l.size;
-    fwrite(l.bias_tmp, sizeof(float), l.n, fp);
+    
     if (l.batch_normalize){
+        fwrite(l.biases, sizeof(float), l.n, fp);
         fwrite(l.scales, sizeof(float), l.n, fp);
         fwrite(l.rolling_mean, sizeof(float), l.n, fp);
         fwrite(l.rolling_variance, sizeof(float), l.n, fp);
-    }
+    } else {
+		fwrite(l.bias_tmp, sizeof(float), l.n, fp);
+	}
     fwrite(l.weight_tmp, sizeof(float), num, fp);
     if(l.adam){
         fwrite(l.m, sizeof(float), num, fp);
